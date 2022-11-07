@@ -1,0 +1,51 @@
+name: Flask CICD
+
+# 觸發條件
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# 執行一項或多項任務
+jobs: 
+  Stop-Containers:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    # 遠端部署
+    - name: stop nginx container
+      run: 
+        docker container stop $(docker container ls -q --filter name=flask-api)
+    - name: stop flask container
+      if: always()
+      run:
+        docker container stop $(docker container ls -q --filter name=nginx-flask)
+    - name: prune containers
+      if: always()
+      run:
+        docker container prune -f
+  CD:
+    runs-on: self-hosted
+    needs: Stop-Containers
+    if: always()
+    steps:
+    - name: route to code folder
+      run:
+        cd ~/code
+    - name: clone source code
+      run:
+        git clone https://github.com/w110056005/PointCloudApi.git
+    - name: route to project
+      run:
+        cd ./docker-sample
+    - name: docker compose up 
+      run:
+        docker-compose up -d --build
+    - name: route back
+      run:
+        cd .. 
+    - name: remove project folder
+      run:
+        rm -rf flask-api
+    
