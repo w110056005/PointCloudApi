@@ -9,15 +9,6 @@ import numpy as np
 import copy
 import sys
 
-
-# In[4]:
-
-
-import open3d as o3d
-import numpy as np
-import copy
-
-
 def draw_registration_result(source, target, transformation):
     source_temp = copy.deepcopy(source)
     target_temp = copy.deepcopy(target)
