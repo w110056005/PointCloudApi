@@ -76,22 +76,26 @@ def registration():
     """
     files = request.files.getlist("file")
     ext = Path(files[0].filename).suffix
+
+    prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
+    output_name = prefix+ext
+    file_folder = '/app/files/'+prefix+'/'
+    os.makedirs(file_folder)
+
     for file in files:
-        print(file.name)
-        file.save(file.filename)
+        file.save(file_folder+file.filename)
 
     prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
     output_name = prefix+ext
     file_folder = '/app/files/'+prefix
     os.makedirs(file_folder)
 
-    print(output_name)
     p = subprocess.run(
         [
             'python', 'global_registration.py',
-            file_folder+'/'+files[0].filename,
-            file_folder+'/'+files[1].filename,
-            file_folder+'/'+output_name
+            file_folder+files[0].filename,
+            file_folder+files[1].filename,
+            file_folder+output_name
         ]
     )
     return output_name
