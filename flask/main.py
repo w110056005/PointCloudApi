@@ -82,17 +82,17 @@ def registration():
     file_folder = '/app/files/'+prefix+'/'
     os.makedirs(file_folder)
 
-    for file in files:
-        file.save(file_folder+file.filename)
+    # for file in files:
+    #     file.save(file_folder+file.filename)
 
-    p = subprocess.run(
-        [
-            'python', 'global_registration.py',
-            file_folder+files[0].filename,
-            file_folder+files[1].filename,
-            file_folder+output_name
-        ]
-    )
+    # p = subprocess.run(
+    #     [
+    #         'python', 'global_registration.py',
+    #         file_folder+files[0].filename,
+    #         file_folder+files[1].filename,
+    #         file_folder+output_name
+    #     ]
+    # )
     return output_name
 
 
