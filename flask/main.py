@@ -85,11 +85,6 @@ def registration():
     for file in files:
         file.save(file_folder+file.filename)
 
-    prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
-    output_name = prefix+ext
-    file_folder = '/app/files/'+prefix
-    os.makedirs(file_folder)
-
     p = subprocess.run(
         [
             'python', 'global_registration.py',
