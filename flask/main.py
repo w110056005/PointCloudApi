@@ -60,6 +60,23 @@ def hello_world():
     return "Hello World"
 
 
+@app.route('/registration', methods=['GET'])
+@auth.login_required
+def registration():
+    """
+      Get registrated point cloud file
+      ---
+      tags:
+        - Node APIs
+      produces: application/json,
+      responses:
+        200:
+          description: Return pcd 
+    """
+    id = request.args.get('id', default=1, type=str)
+    return send_file('/app/files/'+id+'/'+id+'.pcd', as_attachment=True)
+
+
 @app.route('/registration', methods=['POST'])
 @auth.login_required
 def registration():
