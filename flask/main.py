@@ -1,5 +1,6 @@
 import subprocess
 import datetime
+import os
 from flask import Flask, request, send_file
 from flasgger import Swagger
 from flask_httpauth import HTTPBasicAuth
@@ -82,8 +83,8 @@ def registration():
     file_folder = '/app/files/'+prefix+'/'
     os.makedirs(file_folder)
 
-    # for file in files:
-    #     file.save(file_folder+file.filename)
+    for file in files:
+        file.save(file_folder+file.filename)
 
     # p = subprocess.run(
     #     [
