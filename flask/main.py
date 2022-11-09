@@ -34,6 +34,7 @@ swagger_template = {
 
 Swagger(app, template=swagger_template)
 
+DOWNLOAD_DIRECTORY = '/app/files/'
 
 @auth.verify_password
 def verify_password(username, password):
@@ -60,9 +61,9 @@ def hello_world():
     return "Hello World"
 
 
-@app.route('/registration', methods=['GET'])
+@app.route('/files/<id:id>', methods=['GET'])
 @auth.login_required
-def registration():
+def get_files():
     """
       Get registrated point cloud file
       ---
@@ -71,10 +72,12 @@ def registration():
       produces: application/json,
       responses:
         200:
-          description: Return pcd 
+          description: Return pcd
     """
-    id = request.args.get('id', default=1, type=str)
-    return send_file('/app/files/'+id+'/'+id+'.pcd', as_attachment=True)
+    try:
+        return send_from_directory(DOWNLOAD_DIRECTORY, id+'.pcd', as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
 
 
 @app.route('/registration', methods=['POST'])
@@ -97,7 +100,7 @@ def registration():
 
     prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
     output_name = prefix+ext
-    file_folder = '/app/files/'+prefix+'/'
+    file_folder = DOWNLOAD_DIRECTORY+prefix+'/'
     os.makedirs(file_folder)
 
     for file in files:
