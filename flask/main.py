@@ -61,23 +61,23 @@ def hello_world():
     return "Hello World"
 
 
-@app.route('/files/<id:id>', methods=['GET'])
-@auth.login_required
-def get_files():
-    """
-      Get registrated point cloud file
-      ---
-      tags:
-        - Node APIs
-      produces: application/json,
-      responses:
-        200:
-          description: Return pcd
-    """
-    try:
-        return send_from_directory(DOWNLOAD_DIRECTORY, id+'.pcd', as_attachment=True)
-    except FileNotFoundError:
-        abort(404)
+#@app.route('/files/<id:id>', methods=['GET'])
+#@auth.login_required
+#def get_files():
+#    """
+#      Get registrated point cloud file
+#      ---
+#      tags:
+#        - Node APIs
+#      produces: application/json,
+#      responses:
+#        200:
+#          description: Return pcd
+#    """
+#    try:
+#        return send_from_directory(DOWNLOAD_DIRECTORY, id+'.pcd', as_attachment=True)
+#    except FileNotFoundError:
+#        abort(404)
 
 
 @app.route('/registration', methods=['POST'])
