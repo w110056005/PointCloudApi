@@ -61,7 +61,7 @@ def hello_world():
     return "Hello World"
 
 
-@app.route('/files/<id:id>', methods=['GET'])
+@app.route('/files/<id>', methods=['GET'])
 @auth.login_required
 def get_files():
    """
