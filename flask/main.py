@@ -1,7 +1,7 @@
 import subprocess
 import datetime
 import os
-from flask import Flask, request, send_file
+from flask import Flask, request, send_from_directory
 from flasgger import Swagger
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -61,60 +61,60 @@ def hello_world():
     return "Hello World"
 
 
-#@app.route('/files/<id:id>', methods=['GET'])
-#@auth.login_required
-#def get_files():
-#    """
-#      Get registrated point cloud file
-#      ---
-#      tags:
-#        - Node APIs
-#      produces: application/json,
-#      responses:
-#        200:
-#          description: Return pcd
-#    """
-#    try:
-#        return send_from_directory(DOWNLOAD_DIRECTORY, id+'.pcd', as_attachment=True)
-#    except FileNotFoundError:
-#        abort(404)
-
-
-@app.route('/registration', methods=['POST'])
+@app.route('/files/<id:id>', methods=['GET'])
 @auth.login_required
-def registration():
-    """
-      Merge two Point Cloud files and retrun the result file name
-      ---
-      tags:
-        - Node APIs
-      produces: application/json,
-      responses:
-        200:
-          description: Merge two Point Cloud files 
-          examples:
-            "20221107210100147.pcd"
-    """
-    files = request.files.getlist("file")
-    ext = Path(files[0].filename).suffix
+def get_files():
+   """
+     Get registrated point cloud file
+     ---
+     tags:
+       - Node APIs
+     produces: application/json,
+     responses:
+       200:
+         description: Return pcd
+   """
+   try:
+       return send_from_directory(DOWNLOAD_DIRECTORY, id+'.pcd', as_attachment=True)
+   except FileNotFoundError:
+       abort(404)
 
-    prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
-    output_name = prefix+ext
-    file_folder = DOWNLOAD_DIRECTORY+prefix+'/'
-    os.makedirs(file_folder)
 
-    for file in files:
-        file.save(file_folder+file.filename)
+# @app.route('/registration', methods=['POST'])
+# @auth.login_required
+# def registration():
+#     """
+#       Merge two Point Cloud files and retrun the result file name
+#       ---
+#       tags:
+#         - Node APIs
+#       produces: application/json,
+#       responses:
+#         200:
+#           description: Merge two Point Cloud files 
+#           examples:
+#             "20221107210100147.pcd"
+#     """
+#     files = request.files.getlist("file")
+#     ext = Path(files[0].filename).suffix
 
-    p = subprocess.run(
-        [
-            'python', 'global_registration.py',
-            file_folder+files[0].filename,
-            file_folder+files[1].filename,
-            file_folder+output_name
-        ]
-    )
-    return output_name
+#     prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
+#     output_name = prefix+ext
+#     file_folder = DOWNLOAD_DIRECTORY+prefix+'/'
+#     os.makedirs(file_folder)
+
+#     for file in files:
+#         file.save(file_folder+file.filename)
+
+#     p = subprocess.run(
+#         [
+#             'python', 'global_registration.py',
+#             file_folder+files[0].filename,
+#             file_folder+files[1].filename,
+#             file_folder+output_name
+#         ]
+#     )
+#     return output_name
 
 
 if __name__ == "__main__":
