@@ -70,6 +70,11 @@ def get_files():
      tags:
        - Node APIs
      produces: application/json,
+     parameters:
+     - name: id
+       in: path
+       type: string
+       required: true
      responses:
        200:
          description: Return pcd
@@ -80,41 +85,41 @@ def get_files():
        abort(404)
 
 
-# @app.route('/registration', methods=['POST'])
-# @auth.login_required
-# def registration():
-#     """
-#       Merge two Point Cloud files and retrun the result file name
-#       ---
-#       tags:
-#         - Node APIs
-#       produces: application/json,
-#       responses:
-#         200:
-#           description: Merge two Point Cloud files 
-#           examples:
-#             "20221107210100147.pcd"
-#     """
-#     files = request.files.getlist("file")
-#     ext = Path(files[0].filename).suffix
+@app.route('/registration', methods=['POST'])
+@auth.login_required
+def registration():
+    """
+      Merge two Point Cloud files and retrun the result file name
+      ---
+      tags:
+        - Node APIs
+      produces: application/json,
+      responses:
+        200:
+          description: Merge two Point Cloud files 
+          examples:
+            "20221107210100147.pcd"
+    """
+    files = request.files.getlist("file")
+    ext = Path(files[0].filename).suffix
 
-#     prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
-#     output_name = prefix+ext
-#     file_folder = DOWNLOAD_DIRECTORY+prefix+'/'
-#     os.makedirs(file_folder)
+    prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
+    output_name = prefix+ext
+    file_folder = DOWNLOAD_DIRECTORY+prefix+'/'
+    os.makedirs(file_folder)
 
-#     for file in files:
-#         file.save(file_folder+file.filename)
+    for file in files:
+        file.save(file_folder+file.filename)
 
-#     p = subprocess.run(
-#         [
-#             'python', 'global_registration.py',
-#             file_folder+files[0].filename,
-#             file_folder+files[1].filename,
-#             file_folder+output_name
-#         ]
-#     )
-#     return output_name
+    p = subprocess.run(
+        [
+            'python', 'global_registration.py',
+            file_folder+files[0].filename,
+            file_folder+files[1].filename,
+            file_folder+output_name
+        ]
+    )
+    return output_name
 
 
 if __name__ == "__main__":
