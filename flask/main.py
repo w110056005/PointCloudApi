@@ -67,7 +67,7 @@ def verify_password(username, password):
     return False
 
 
-@app.route('/files/<id:string>/<ext:string>', methods=['GET'])
+@app.route('/files/<string:id>/<string:ext>', methods=['GET'])
 @auth.login_required
 def get_files(id, ext):
     """
@@ -79,6 +79,10 @@ def get_files(id, ext):
       produces: application/json,
       parameters:
       - name: id
+        in: path
+        type: string
+        required: true
+      - name: ext
         in: path
         type: string
         required: true
