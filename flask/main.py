@@ -104,7 +104,7 @@ def get_files():
           description: Return pcd
     """
     try:
-        return send_from_directory(DOWNLOAD_DIRECTORY+'/'+id, id+'.pcd', as_attachment=True)
+        return send_from_directory(DOWNLOAD_DIRECTORY+id, id+'.pcd', as_attachment=True)
     except Exception as e:
         abort_msg(e)
 
