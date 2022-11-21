@@ -9,6 +9,7 @@ from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import check_password_hash, generate_password_hash
 from pathlib import Path
 
+
 def abort_msg(e):
     """500 bad request for exception
 
@@ -23,9 +24,11 @@ def abort_msg(e):
     lineNum = lastCallStack[1]  # 錯誤行數
     funcName = lastCallStack[2]  # function 名稱
     # generate the error message
-    errMsg = "Exception raise in file: {}, line {}, in {}: [{}] {}.".format(fileName, lineNum, funcName, error_class, detail)
+    errMsg = "Exception raise in file: {}, line {}, in {}: [{}] {}.".format(
+        fileName, lineNum, funcName, error_class, detail)
     # return 500 code
     abort(500, errMsg)
+
 
 app = Flask(__name__)
 app.config['SWAGGER'] = {
@@ -63,9 +66,10 @@ def verify_password(username, password):
         return check_password_hash(users.get(username), password)
     return False
 
-@app.route('/files/<id>', methods=['GET'])
+
+@app.route('/files/<id:string>/<ext:string>', methods=['GET'])
 @auth.login_required
-def get_files():
+def get_files(id, ext):
     """
 
       Get registrated point cloud file
@@ -83,27 +87,10 @@ def get_files():
           description: Return pcd
     """
     try:
-        return send_from_directory(DOWNLOAD_DIRECTORY+id, id+'.pcd', as_attachment=True)
+        return send_from_directory(DOWNLOAD_DIRECTORY+id, id+'.'+ext, as_attachment=True)
     except Exception as e:
         abort_msg(e)
 
-@app.route('/file', methods=['GET'])
-@auth.login_required
-def get_file():
-    """
-      Get file
-      ---
-      tags:
-        - Node APIs
-      produces: application/json,
-      responses:
-        200:
-          description: Return pcd
-    """
-    try:
-        return send_from_directory('/app', 'test.txt', as_attachment=True)
-    except Exception as e:
-        abort_msg(e)
 
 @app.route('/registration', methods=['POST'])
 @auth.login_required
