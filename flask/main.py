@@ -124,7 +124,7 @@ def registration():
 
     p = subprocess.run(
         [
-            'python', 'global_registration.py',
+            'python', 'global_registration-ply_arg.py',
             file_folder+files[0].filename,
             file_folder+files[1].filename,
             file_folder+output_name

@@ -1,0 +1,1 @@
+Keep this empty folder out save the output of segmentation
