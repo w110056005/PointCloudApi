@@ -39,6 +39,9 @@ jobs:
     - name: route to project
       run:
         cd ./PointCloudApi
+    - name: docker compose down
+      run:
+        docker-compose down
     - name: docker compose up 
       run:
         docker-compose up -d --build
