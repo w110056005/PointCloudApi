@@ -41,6 +41,10 @@ jobs:
         cd ./PointCloudApi
     - name: where am I
       run: pwd
+    - name: add time out
+      run: |
+        export DOCKER_CLIENT_TIMEOUT=500
+        export COMPOSE_HTTP_TIMEOUT=500
     - name: docker compose down
       run:
         docker-compose down
