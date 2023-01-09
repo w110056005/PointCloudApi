@@ -10,5 +10,5 @@ RUN apt-get update -y \
 
 RUN python -m pip install --upgrade pip 
 RUN python -m pip install --no-cache-dir -r requirements.txt 
-#RUN python -m pip install --no-cache-dir -r  ./segmentation-pointcloud/requirements.txt 
+RUN python -m pip install --no-cache-dir -r  ./segmentation-pointcloud/requirements.txt 
 CMD ["uwsgi", "wsgi.ini"]
