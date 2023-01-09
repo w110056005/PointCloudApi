@@ -4,5 +4,5 @@ Flasgger
 uWSGI
 Werkzeug
 
-numpy==1.19.2
+numpy==1.19.3
 open3d==0.15.2
