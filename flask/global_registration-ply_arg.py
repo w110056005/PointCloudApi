@@ -112,7 +112,7 @@ result_ransac = execute_global_registration(source_down, target_down,
 
 print('fitness = ',result_ransac.fitness,' rmse = ',result_ransac.inlier_rmse)
 
-result = write_point_cloud(source_down,target_down,result_ransac.transformation)
+result = write_point_cloud(source,target,result_ransac.transformation)
 
 o3d.io.write_point_cloud(pcd_arg3,result,write_ascii=True)
 
