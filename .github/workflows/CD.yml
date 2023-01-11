@@ -3,9 +3,9 @@ name: Flask CICD
 # 觸發條件
 on:
   push:
-    branches: [ master ]
+    branches: [ dev ]
   pull_request:
-    branches: [ master ]
+    branches: [ dev ]
 
 # 執行一項或多項任務
 jobs: 
@@ -39,6 +39,15 @@ jobs:
     - name: route to project
       run:
         cd ./PointCloudApi
+    - name: where am I
+      run: pwd
+    - name: add time out
+      run: |
+        export DOCKER_CLIENT_TIMEOUT=500
+        export COMPOSE_HTTP_TIMEOUT=500
+    - name: docker compose down
+      run:
+        docker-compose down
     - name: docker compose up 
       run:
         docker-compose up -d --build
