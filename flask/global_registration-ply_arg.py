@@ -93,7 +93,7 @@ def execute_global_registration(source_down, target_down, source_fpfh,
     return result
 
 
-voxel_size = 0.5  # means 5cm for this dataset
+voxel_size = 0.05  # means 5cm for this dataset
 pcd_arg1 = str(sys.argv[1])
 pcd_arg2 = str(sys.argv[2])
 pcd_arg3 = str(sys.argv[3])
