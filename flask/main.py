@@ -95,7 +95,6 @@ def get_files(id, ext):
     except Exception as e:
         abort_msg(e)
 
-
 @app.route('/registration', methods=['POST'])
 @auth.login_required
 def registration():
@@ -104,6 +103,11 @@ def registration():
       ---
       tags:
         - Node APIs
+      parameters:
+        - name: file
+          required: true
+          in: formData
+          type: file
       produces: application/json,
       responses:
         200:
