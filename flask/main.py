@@ -67,9 +67,9 @@ def verify_password(username, password):
     return False
 
 
-@app.route('/files/<string:id>/<string:ext>', methods=['GET'])
+@app.route('/files/<string:id>/<string:filename>/<string:ext>', methods=['GET'])
 @auth.login_required
-def get_files(id, ext):
+def get_files(id, filename, ext):
     """
 
       Get registrated point cloud file
@@ -82,6 +82,10 @@ def get_files(id, ext):
         in: path
         type: string
         required: true
+      - name: filename
+        in: path
+        type: string
+        required: true
       - name: ext
         in: path
         type: string
@@ -91,7 +95,7 @@ def get_files(id, ext):
           description: Return ply
     """
     try:
-        return send_from_directory(DOWNLOAD_DIRECTORY+id, id+'.'+ext, as_attachment=True)
+        return send_from_directory(DOWNLOAD_DIRECTORY+id, filename+'.'+ext, as_attachment=True)
     except Exception as e:
         abort_msg(e)
 
@@ -124,10 +128,7 @@ def segmentation(id):
             './segmentation-pointcloud/code/logs/SparseEncDec_Semantic3D_torch/checkpoint'
         ]
     )
-    try:
-        return send_from_directory(DOWNLOAD_DIRECTORY+id, id+'_segmentation.ply', as_attachment=True)
-    except Exception as e:
-        abort_msg(e)
+    return id
 
 
 @app.route('/registration', methods=['POST'])
