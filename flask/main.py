@@ -67,9 +67,9 @@ def verify_password(username, password):
     return False
 
 
-@app.route('/files/<string:id>/<string:ext>', methods=['GET'])
+@app.route('/files/<string:id>/<string:filename>/<string:ext>', methods=['GET'])
 @auth.login_required
-def get_files(id, ext):
+def get_files(id, filename, ext):
     """
 
       Get registrated point cloud file
@@ -82,18 +82,53 @@ def get_files(id, ext):
         in: path
         type: string
         required: true
+      - name: filename
+        in: path
+        type: string
+        required: true
       - name: ext
         in: path
         type: string
         required: true
       responses:
         200:
-          description: Return pcd
+          description: Return ply
     """
     try:
-        return send_from_directory(DOWNLOAD_DIRECTORY+id, id+'.'+ext, as_attachment=True)
+        return send_from_directory(DOWNLOAD_DIRECTORY+id, filename+'.'+ext, as_attachment=True)
     except Exception as e:
         abort_msg(e)
+
+@app.route('/segmentation/<string:id>', methods=['GET'])
+@auth.login_required
+def segmentation(id):
+    """
+      Get the segmentated ply file
+      ---
+      tags:
+        - Node APIs
+      parameters:
+      - name: id
+        in: path
+        type: string
+        required: true
+      produces: application/json,
+      responses:
+        200:
+          description: The segmentated file 
+          examples:
+            "20221107210100147_segmentation.ply"
+    """
+    p = subprocess.run(
+        [
+            'python', './segmentation-pointcloud/code/test.py',
+            '--data_path',
+            id,
+            '--ckpt_path',
+            './segmentation-pointcloud/code/logs/SparseEncDec_Semantic3D_torch/checkpoint'
+        ]
+    )
+    return id
 
 
 @app.route('/registration', methods=['POST'])
@@ -104,12 +139,17 @@ def registration():
       ---
       tags:
         - Node APIs
+      parameters:
+        - name: file
+          required: true
+          in: formData
+          type: file
       produces: application/json,
       responses:
         200:
-          description: Merge two Point Cloud files 
+          description: The merged file name 
           examples:
-            "20221107210100147.pcd"
+            "20221107210100147.ply"
     """
     files = request.files.getlist("file")
     ext = Path(files[0].filename).suffix

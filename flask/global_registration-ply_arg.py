@@ -93,7 +93,7 @@ def execute_global_registration(source_down, target_down, source_fpfh,
     return result
 
 
-voxel_size = 0.1  # means 5cm for this dataset
+voxel_size = 0.05  # means 5cm for this dataset
 pcd_arg1 = str(sys.argv[1])
 pcd_arg2 = str(sys.argv[2])
 pcd_arg3 = str(sys.argv[3])
@@ -112,7 +112,7 @@ result_ransac = execute_global_registration(source_down, target_down,
 
 print('fitness = ',result_ransac.fitness,' rmse = ',result_ransac.inlier_rmse)
 
-result = write_point_cloud(source,target,result_ransac.transformation)
+result = write_point_cloud(source_down,target_down,result_ransac.transformation)
 
 o3d.io.write_point_cloud(pcd_arg3,result,write_ascii=True)
 
