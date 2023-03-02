@@ -139,6 +139,7 @@ def registration():
       ---
       tags:
         - Node APIs
+      consumes: [multipart/form-data]
       parameters:
         - name: file
           required: true
