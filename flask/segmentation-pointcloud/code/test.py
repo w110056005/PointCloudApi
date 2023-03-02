@@ -63,6 +63,10 @@ def test(args,cfg):
 if __name__ == '__main__':
     args = parse_args()
     cfg_file = "./config.yml"
+    # get id
+    id = args.data_path
+    # set the real path to arg
+    args.data_path = './files/'+id+'/'+id+'.ply'
     cfg = ml3d.utils.Config.load_from_file(cfg_file)
     test(args,cfg)
     viewdata=plytonpy(args.data_path)
@@ -92,7 +96,7 @@ if __name__ == '__main__':
 
     pcd.colors = o3d.utility.Vector3dVector(labels_color)
     #o3d.visualization.draw_geometries([pcd])
-    o3d.io.write_point_cloud("segmentation.ply", pcd)
-    o3d.io.write_point_cloud("raw.ply", pcd1)
+    o3d.io.write_point_cloud('./files/'+id+'/'+id+"_segmentation.ply", pcd)
+    o3d.io.write_point_cloud('./files/'+id+'/'+id+"_raw.ply", pcd1)
     file = Path('../data/test/my.npy')
     file.unlink()

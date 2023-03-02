@@ -88,12 +88,47 @@ def get_files(id, ext):
         required: true
       responses:
         200:
-          description: Return pcd
+          description: Return ply
     """
     try:
         return send_from_directory(DOWNLOAD_DIRECTORY+id, id+'.'+ext, as_attachment=True)
     except Exception as e:
         abort_msg(e)
+
+@app.route('/segmentation', methods=['GET'])
+@auth.login_required
+def segmentation(id):
+    """
+      Get the segmentated ply file
+      ---
+      tags:
+        - Node APIs
+      parameters:
+      - name: id
+        in: path
+        type: string
+        required: true
+      produces: application/json,
+      responses:
+        200:
+          description: The segmentated file 
+          examples:
+            "20221107210100147_segmentation.ply"
+    """
+    p = subprocess.run(
+        [
+            'python', './segmentation-pointcloud/code/test.py',
+            '--data_path',
+            id,
+            '--ckpt_path',
+            './segmentation-pointcloud/code/logs/SparseEncDec_Semantic3D_torch/checkpoint'
+        ]
+    )
+    try:
+        return send_from_directory(DOWNLOAD_DIRECTORY+id, id+'_segmentation.ply', as_attachment=True)
+    except Exception as e:
+        abort_msg(e)
+
 
 @app.route('/registration', methods=['POST'])
 @auth.login_required
@@ -111,9 +146,9 @@ def registration():
       produces: application/json,
       responses:
         200:
-          description: Merge two Point Cloud files 
+          description: The merged file name 
           examples:
-            "20221107210100147.pcd"
+            "20221107210100147.ply"
     """
     files = request.files.getlist("file")
     ext = Path(files[0].filename).suffix
