@@ -99,7 +99,7 @@ def get_files(id, filename, ext):
     except Exception as e:
         abort_msg(e)
 
-@app.route('/segmentation', methods=['GET'])
+@app.route('/segmentation/<string:id>', methods=['GET'])
 @auth.login_required
 def segmentation(id):
     """
