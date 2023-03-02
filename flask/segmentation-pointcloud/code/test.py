@@ -48,7 +48,7 @@ def parse_args():
 
 def test(args,cfg):
     plytonpy(args.data_path)
-    data="../data"
+    data="./segmentation-pointcloud/data"
     #print(data)
     # Initialize the testing by passing parameters
     dataset = MySemantic3D(data, use_cache=True, **cfg.dataset)
@@ -62,7 +62,7 @@ def test(args,cfg):
 
 if __name__ == '__main__':
     args = parse_args()
-    cfg_file = "./segmentation-pointcloud/config.yml"
+    cfg_file = "./segmentation-pointcloud/code/config.yml"
     # get id
     id = args.data_path
     # set the real path to arg
