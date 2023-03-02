@@ -24,7 +24,7 @@ def plytonpy(file):
     for i, name in enumerate(property_names):  # 按property读取数据，这样可以保证读出的数据是同样的数据类型。
         data_np[:, i] = data_pd[name]
     data_np=np.insert(data_np, 6, 0, axis=1)
-    np.save('../data/test/my.npy', data_np)   
+    np.save('./segmentation-pointcloud/data/test/my.npy', data_np)   
     return data_np  
 
 def parse_args():
@@ -62,7 +62,7 @@ def test(args,cfg):
 
 if __name__ == '__main__':
     args = parse_args()
-    cfg_file = "./config.yml"
+    cfg_file = "./segmentation-pointcloud/config.yml"
     # get id
     id = args.data_path
     # set the real path to arg
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     pcd1.points = o3d.utility.Vector3dVector(xyz)
     pcd1.colors = o3d.utility.Vector3dVector(rgb)
 
-    labels = np.load('predictions/predicted_labels.npy')
+    labels = np.load('./segmentation-pointcloud/code/predictions/predicted_labels.npy')
 
     eq = gt_labels == labels
     
@@ -98,5 +98,5 @@ if __name__ == '__main__':
     #o3d.visualization.draw_geometries([pcd])
     o3d.io.write_point_cloud('./files/'+id+'/'+id+"_segmentation.ply", pcd)
     o3d.io.write_point_cloud('./files/'+id+'/'+id+"_raw.ply", pcd1)
-    file = Path('../data/test/my.npy')
+    file = Path('./segmentation-pointcloud/data/test/my.npy')
     file.unlink()

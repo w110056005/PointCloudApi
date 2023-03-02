@@ -181,7 +181,7 @@ class SparseConvSegmentation(BasePipeline):
                 results = model(inputs['data'])
                 pred = results.argmax(dim=1)
                 labels = pred.cpu().numpy()
-                np.save('predictions/predicted_labels.npy', labels)
+                np.save('./segmentation-pointcloud/code/predictions/predicted_labels.npy', labels)
 
         log.info("Finished testing")
 
