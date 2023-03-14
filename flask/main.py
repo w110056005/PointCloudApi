@@ -198,9 +198,12 @@ def segmentation_post():
     file=request.files["file"]
     ext = Path(file.filename).suffix
 
-    prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
-    output_name = prefix + "_segmentation" + ext
-    file_folder = DOWNLOAD_DIRECTORY+prefix+'/'
+    # prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
+    # output_name = prefix+ext
+    id = Path(file.filename).stem
+    # file_folder = DOWNLOAD_DIRECTORY+prefix+'/'
+    file_folder = DOWNLOAD_DIRECTORY+id+'/'
+
     os.makedirs(file_folder)
     file.save(file_folder+file.filename)
 
@@ -208,12 +211,12 @@ def segmentation_post():
         [
             'python', './segmentation-pointcloud/code/test.py',
             '--data_path',
-            file_folder+file.filename,
+            id,
             '--ckpt_path',
             './segmentation-pointcloud/code/logs/SparseEncDec_Semantic3D_torch/checkpoint'
         ]
     )
-    return output_name
+    return id
 
 if __name__ == "__main__":
     app.run(debug=True)
