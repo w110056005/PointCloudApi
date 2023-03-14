@@ -71,7 +71,7 @@ if __name__ == '__main__':
     test(args,cfg)
     viewdata=plytonpy(args.data_path)
     xyz = viewdata[:,:3]
-    rgb = viewdata[:,3:6]/255
+    rgb = viewdata[:,3:6]/255.0
     gt_labels = viewdata[:,6]
 
     # visualize colored point cloud
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     vis_colors = np.array([[255,0,0], [0,255,0], [0,0,255], [255,255,0], [0,255,255], [255,0,255], [255,127,255], [127,255,255], [127,127,255], [127,255,127], [255,127,127], [127,127,127], [127,127,255]])
     labels_color = np.zeros((labels.shape[0],3))
     for i in range(len(vis_colors)):
-        labels_color[labels==i] = vis_colors[i]/255
+        labels_color[labels==i] = vis_colors[i]/256.0
 
     pcd.colors = o3d.utility.Vector3dVector(labels_color)
     #o3d.visualization.draw_geometries([pcd])
