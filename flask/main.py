@@ -173,6 +173,46 @@ def registration():
     )
     return output_name
 
+@app.route('/segmentation', methods=['POST'])
+@auth.login_required
+def segmentation():
+    """
+      post segmentated ply file 
+      ---
+      tags:
+        - Node APIs
+      parameters:
+      - name: file
+          required: true
+          in: formData
+          type: file
+      produces: application/json,
+      responses:
+        200:
+          description: The segmentated file 
+          examples:
+            "20221107210100147_segmentation.ply"
+    """
+    # files = request.files.getlist("file")
+    file=request.files["file"]
+    ext = Path(file.filename).suffix
+
+    prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
+    output_name = prefix + "_segmentation" + ext
+    file_folder = DOWNLOAD_DIRECTORY+prefix+'/'
+    os.makedirs(file_folder)
+    file.save(file_folder+file.filename)
+
+    p = subprocess.run(
+        [
+            'python', './segmentation-pointcloud/code/test.py',
+            '--data_path',
+            file_folder+file.filename,
+            '--ckpt_path',
+            './segmentation-pointcloud/code/logs/SparseEncDec_Semantic3D_torch/checkpoint'
+        ]
+    )
+    return output_name
 
 if __name__ == "__main__":
     app.run(debug=True)

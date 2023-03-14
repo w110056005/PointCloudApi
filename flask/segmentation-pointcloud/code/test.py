@@ -97,6 +97,6 @@ if __name__ == '__main__':
     pcd.colors = o3d.utility.Vector3dVector(labels_color.astype(np.float64))
     #o3d.visualization.draw_geometries([pcd])
     o3d.io.write_point_cloud('./files/'+id+'/'+id+"_segmentation.ply", pcd, write_ascii=True)
-    # o3d.io.write_point_cloud('./files/'+id+'/'+id+"_raw.ply", pcd1, write_ascii=True)
+    o3d.io.write_point_cloud('./files/'+id+'/'+id+"_raw.ply", pcd1, write_ascii=True)
     file = Path('./segmentation-pointcloud/data/test/my.npy')
     file.unlink()
