@@ -175,24 +175,25 @@ def registration():
 
 @app.route('/segmentation', methods=['POST'])
 @auth.login_required
-def segmentation():
+def segmentation_post():
     """
       post segmentated ply file 
       ---
       tags:
         - Node APIs
       parameters:
-      - name: file
+        - name: file
           required: true
           in: formData
           type: file
       produces: application/json,
       responses:
         200:
-          description: The segmentated file 
+          description: run segmentated file without registration
           examples:
             "20221107210100147_segmentation.ply"
     """
+
     # files = request.files.getlist("file")
     file=request.files["file"]
     ext = Path(file.filename).suffix
