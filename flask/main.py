@@ -177,7 +177,7 @@ def registration():
 @auth.login_required
 def segmentation_post():
     """
-      post segmentated ply file 
+      segmentated ply file without registration
       ---
       tags:
         - Node APIs
@@ -193,19 +193,17 @@ def segmentation_post():
           examples:
             "20221107210100147_segmentation.ply"
     """
-
-    # files = request.files.getlist("file")
     file=request.files["file"]
     ext = Path(file.filename).suffix
-
-    # prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
-    # output_name = prefix+ext
-    id = Path(file.filename).stem
+    prefix = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
+    id = prefix
+    outputName = id+ext
     # file_folder = DOWNLOAD_DIRECTORY+prefix+'/'
     file_folder = DOWNLOAD_DIRECTORY+id+'/'
 
     os.makedirs(file_folder)
-    file.save(file_folder+file.filename)
+    file.filename = outputName 
+    file.save(file_folder + file.filename)
 
     p = subprocess.run(
         [
@@ -217,6 +215,32 @@ def segmentation_post():
         ]
     )
     return id
+
+@app.route('/filesExit/<string:foldername>/<string:filename>', methods=['GET'])
+@auth.login_required
+def files_exit(foldername, filename):
+    """
+      check if file exist
+      ---
+      tags:
+        - Node APIs
+      produces: application/json,
+      parameters:
+      - name: foldername
+        in: path
+        type: string
+        required: true
+      - name: filename
+        in: path
+        type: string
+        required: true
+      responses:
+        200:
+          description: Return isExist = 1 or 0
+    """
+    path = DOWNLOAD_DIRECTORY + foldername + filename +".ply"
+    isExisting = os.path.exists(path)
+    return isExisting
 
 if __name__ == "__main__":
     app.run(debug=True)
