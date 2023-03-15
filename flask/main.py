@@ -242,7 +242,10 @@ def files_exit(foldername, filename):
     """
     path = DOWNLOAD_DIRECTORY + foldername + '/' + filename +'.ply'
     isExist = os.path.exists(path)
-    return str(isExist)
+    if isExist == True:
+        return "1"
+    elif isExist == False:
+        return "0"
 
 if __name__ == "__main__":
     app.run(debug=True)
