@@ -240,9 +240,9 @@ def files_exit(foldername, filename):
         200:
           description: Return isExist = 1 or 0
     """
-    path = DOWNLOAD_DIRECTORY + foldername + "/" + filename +".ply"
-    isExisting = os.path.exists(path)
-    return isExisting
+    path = DOWNLOAD_DIRECTORY + foldername + '/' + filename +'.ply'
+    isExist = os.path.exists(path)
+    return str(isExist)
 
 if __name__ == "__main__":
     app.run(debug=True)
