@@ -246,9 +246,10 @@ def files_exit(foldername, filename):
         return "1"
     elif isExist == False:
         return "0"
-    
-@app.route('/listdir')
-def list_dir():
+
+@app.route('/listfolder')
+@auth.login_required
+def list_folder():
     """
     Return folderlist 
     ---
@@ -261,13 +262,27 @@ def list_dir():
         examples:
           "Return folderlist "
     """
-    ALLfiles=[]
-    for root,dirs,files in os.walk(DOWNLOAD_DIRECTORY):
-        for file in files:
-            file_path = os.path.join(root,file)
-            file_name = os.path.basename(file_path)
-            ALLfiles.append(file_name)
-    return ALLfiles
+    folder_list = os.listdir(DOWNLOAD_DIRECTORY)
+    return folder_list
+
+@app.route('/listfiles/<string:foldername>', methods=['GET'])
+@auth.login_required
+def list_files(foldername):
+    """
+    Return fileslist 
+    ---
+    tags:
+      - Node APIs
+    produces: application/json,
+    responses:
+      200:
+        description: Return folderlist 
+        examples:
+          "Return fileslist "
+    """
+    path = DOWNLOAD_DIRECTORY + foldername 
+    file_list = os.listdir(path)
+    return file_list
 
 if __name__ == "__main__":
     app.run(debug=True)
