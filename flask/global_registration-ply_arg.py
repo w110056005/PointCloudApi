@@ -43,13 +43,13 @@ def preprocess_point_cloud(pcd, voxel_size):
     radius_normal = voxel_size * 2
     print(":: Estimate normal with search radius %.3f." % radius_normal)
     pcd_down.estimate_normals(
-        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=30))
+        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=400))
 
     radius_feature = voxel_size * 5
     print(":: Compute FPFH feature with search radius %.3f." % radius_feature)
     pcd_fpfh = o3d.pipelines.registration.compute_fpfh_feature(
         pcd_down,
-        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=100))
+        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=400))
     return pcd_down, pcd_fpfh
 
 def prepare_dataset(voxel_size,sour,tar,R):
@@ -89,7 +89,7 @@ def execute_global_registration(source_down, target_down, source_fpfh,
                 0.9),
             o3d.pipelines.registration.CorrespondenceCheckerBasedOnDistance(
                 distance_threshold)
-        ], o3d.pipelines.registration.RANSACConvergenceCriteria(100000, 0.999))
+        ], o3d.pipelines.registration.RANSACConvergenceCriteria(150000, 0.999))
     return result
 
 
